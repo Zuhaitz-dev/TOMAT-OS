@@ -1,9 +1,11 @@
 # TOMAT-OS
-Attempt of Operating System (C++) 🍅
 
 ![CC0 License](https://img.shields.io/badge/License-CC0-blue.svg)
 ![GitHub Repo Size](https://img.shields.io/github/repo-size/Zuhaitz-dev/TOMAT-OS)
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/Zuhaitz-dev/TOMAT-OS)
+
+
+***Attempt of Operating System (C++) 🍅***
 
 Do not expect greatness. I am learning, and that is amazing. I am using [this great tutorial](https://www.youtube.com/watch?v=1rnA6wpF0o4&list=PLHh55M_Kq4OApWScZyPl5HhgsTJS9MZ6M).
 
