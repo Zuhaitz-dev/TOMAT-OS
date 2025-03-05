@@ -28,7 +28,7 @@ Do not expect greatness. I am learning, and that is amazing. I am using [this gr
 
 ## Installation & Usage
 
-TOMAT-OS requires a GCC cross-compiler, GRUB for booting, and QEMU for testing.  
+TOMAT-OS requires a GCC cross-compiler, GRUB for booting, and QEMU for testing (VirtualBox available too *now*).  
 Clone the repository, compile the kernel, and run it in an emulator to see it in action. 
 
 ```bash
@@ -41,6 +41,15 @@ make
 
 # Run in QEMU
 make run
+
+# Run ISO image in QEMU
+make run-iso
+
+# Run ISO image in VirtualBox
+make run-iso-vbox
+
+# Clean build files
+make clean
 ```
 
 ---
