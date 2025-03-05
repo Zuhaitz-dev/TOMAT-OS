@@ -1,3 +1,12 @@
+/**
+ * @file linker.ld
+ * @brief This linker script defines the memory layout for the TOMAT-OS kernel.
+ *
+ * This file provides the linker script for the TOMAT-OS kernel, specifying the entry point,
+ * output format, and memory sections. It ensures that the kernel is correctly linked and
+ * loaded into memory, with sections for text, data, and bss.
+ */
+
 /* As we are working with assembly lang and C++, we need this */
 
 ENTRY(loader)

@@ -1,3 +1,12 @@
+/**
+ * @file loader.s
+ * @brief This assembly file contains the bootloader code for TOMAT-OS.
+ *
+ * This file provides the implementation of the bootloader, which sets up the initial
+ * stack and calls the kernel's main function. It also includes the Multiboot header
+ * required for booting with a Multiboot-compliant bootloader.
+ */
+
 .set MAGIC,         0x1badb002
 .set FLAGS,         (1<<0 | 1<<1)
 .set CHECKSUM,      -(MAGIC + FLAGS)
@@ -9,10 +18,14 @@
 
 .section .text
 .extern kernelMain
+.extern callConstructors
 .global loader
 
 loader:
     mov     $kernel_stack, %esp
+
+    call    callConstructors
+
     push    %eax
     push    %ebx
     call    kernelMain
