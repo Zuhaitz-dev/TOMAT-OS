@@ -8,13 +8,15 @@ TOMAT-OS is a simple 32-bit operating system designed for educational purposes. 
 
 The project is organized into several key files and directories:
 
-- `loader.s`: Assembly file containing the bootloader code.
-- `kernel.cpp`: Main entry point for the TOMAT-OS kernel.
-- `gdt.h` and `gdt.cpp`: Header and source files for the Global Descriptor Table (GDT).
-- `port.h` and `port.cpp`: Header and source files for interacting with I/O ports.
-- `types.h`: Header file defining fixed-width integer types.
-- `linker.ld`: Linker script defining the memory layout for the kernel.
-- `Makefile`: Build script for compiling and linking the kernel.
+- `loader.s`
+- `kernel.cpp`
+- `gdt.h` and `gdt.cpp`
+- `port.h` and `port.cpp`
+- `types.h`
+- `interrupts.cpp` and `interrupts.h`
+- `interruptstubs.s`
+- `linker.ld`
+- `Makefile`
 
 ## Files
 
@@ -31,8 +33,6 @@ The project is organized into several key files and directories:
  */
  ```
 
-The `loader.s` file contains the bootloader code written in assembly language. It sets up the initial stack and calls the kernel's main function. It also includes the Multiboot header required for booting with a Multiboot-compliant bootloader.
-
 ### `kernel.cpp`
 
  ```c
@@ -45,8 +45,6 @@ The `loader.s` file contains the bootloader code written in assembly language. I
  * and a callConstructors function for calling global constructors.
  */
  ```
-
-The `kernel.cpp` file contains the main entry point for the TOMAT-OS kernel. It includes the kernelMain function, a simple printf function for displaying text on the screen, and a callConstructors function for calling global constructors.
 
 ### `gdt.h`
 
@@ -61,8 +59,6 @@ The `kernel.cpp` file contains the main entry point for the TOMAT-OS kernel. It 
  */
  ```
 
-The `gdt.h` file defines the Global Descriptor Table (GDT) and its associated Segment Descriptors. The GDT is used by the CPU to define the characteristics of the various memory segments used in the system, such as base address, size, and access privileges.
-
 ### `gdt.cpp`
 
  ```c
@@ -75,8 +71,6 @@ The `gdt.h` file defines the Global Descriptor Table (GDT) and its associated Se
  * the base and limit of the Segment Descriptors.
  */
  ```
-
-The `gdt.cpp` file implements the Global Descriptor Table (GDT) and its associated Segment Descriptors. It includes the constructor and destructor for the GlobalDescriptorTable class, as well as methods for accessing the base and limit of the Segment Descriptors.
 
 ### `port.h`
 
@@ -91,8 +85,6 @@ The `gdt.cpp` file implements the Global Descriptor Table (GDT) and its associat
  */
  ```
 
-The `port.h` file defines classes for interacting with I/O ports. It provides the declaration of the Port class and its derived classes for 8-bit, 16-bit, and 32-bit I/O port operations. These classes provide methods for reading from and writing to I/O ports, which are essential for hardware communication.
-
 ### `port.cpp`
 
  ```c
@@ -105,8 +97,6 @@ The `port.h` file defines classes for interacting with I/O ports. It provides th
  * for reading from and writing to I/O ports, which are essential for hardware communication.
  */
  ```
-
-The `port.cpp` file implements classes for interacting with I/O ports. It provides the implementation of the Port class and its derived classes for 8-bit, 16-bit, and 32-bit I/O port operations. These classes provide methods for reading from and writing to I/O ports, which are essential for hardware communication.
 
 ### `types.h`
 
@@ -121,7 +111,46 @@ The `port.cpp` file implements classes for interacting with I/O ports. It provid
  */
  ```
 
-The `types.h` file defines fixed-width integer types. It provides typedefs for integer types with specific widths, ensuring that the integers have the same size on any platform, which is crucial for portability and consistency in systems programming.
+### `interrupts.cpp`
+
+ ```c
+/**
+ * @file interrupts.cpp
+ * @brief works with the Interrupt Descriptor Table (IDT) and its associated Interrupt Manager.
+ *
+ * The IDT is used by the CPU to handle interrupts and exceptions. This file includes the declaration of the
+ * InterruptManager class, which is responsible for setting up the IDT, managing interrupt handlers, and
+ * handling interrupt requests. The IDT entries are defined by the GateDescriptor structure, which specifies
+ * the handler address, code segment selector, and access rights.
+ */
+ ```
+
+### `interrupts.h`
+
+ ```c
+/**
+ * @file interrupts.h
+ * @brief This header file defines the Interrupt Descriptor Table (IDT) and its associated Interrupt Manager.
+ *
+ * The IDT is used by the CPU to handle interrupts and exceptions. This file includes the declaration of the
+ * InterruptManager class, which is responsible for setting up the IDT, managing interrupt handlers, and
+ * handling interrupt requests. The IDT entries are defined by the GateDescriptor structure, which specifies
+ * the handler address, code segment selector, and access rights.
+ */
+ ```
+
+### `interruptstubs.s`
+
+ ```plaintext
+/**
+ * @file interruptstubs.s
+ * @brief This file contains the assembly-level interrupt stubs for handling exceptions and hardware interrupts.
+ *
+ * The stubs are responsible for saving the CPU state, calling the appropriate interrupt handler in the
+ * InterruptManager class, and restoring the CPU state after the interrupt is handled. This file also defines
+ * macros for generating exception and interrupt handlers dynamically.
+ */
+ ```
 
 ### `linker.ld`
 
@@ -135,8 +164,6 @@ The `types.h` file defines fixed-width integer types. It provides typedefs for i
  * loaded into memory, with sections for text, data, and bss.
  */
  ```
-
-The `linker.ld` file defines the memory layout for the TOMAT-OS kernel. It specifies the entry point, output format, and memory sections, ensuring that the kernel is correctly linked and loaded into memory.
 
 ## Building and Running
 
@@ -172,7 +199,7 @@ make run-iso
 make clean
 ```
 
-6. If you desire to run it on VirtualBox, use:
+6. If you desire to run it in VirtualBox, use:
 
 ```bash
 make run-iso-vbox

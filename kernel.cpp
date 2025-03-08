@@ -9,6 +9,7 @@
 
  #include "types.h"
  #include "gdt.h"
+ #include "interrupts.h"
  
  void printf(char* str)
  {
@@ -91,22 +92,27 @@
  }
  
  // We add extern "C" so the fuction name isn't modified and doesn't cause problems 
- extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber) 
+ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/) 
  {
      printf("Hello World! --- https://github.com/Zuhaitz-dev\n");    // Will not work without the printf function we made. 
                                                                      // Libraries won't work, for now, so we have to make everything.
  
      // Trying a longer text to test the new features.
-     
+ 
      printf("\nLorem ipsum dolor sit amet, "
             "consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
             "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris "
             "nisi ut aliquip ex ea commodo consequat. "
             "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "
-            "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n");
+            "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
  
      GlobalDescriptorTable gdt;
+     InterruptManager interrupts(&gdt);
+     //InterruptManager interrupts(0x20, &gdt);
+ 
+ 
+     interrupts.Activate();
  
      while (1);
  
