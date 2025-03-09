@@ -5,7 +5,7 @@ LDPARAMS = -melf_i386
 QEMU = qemu-system-i386
 
 # Object files
-objects = loader.o gdt.o kernel.o port.o interrupts.o interruptstubs.o
+objects = loader.o gdt.o kernel.o port.o interrupts.o interruptstubs.o keyboard.o mouse.o
 
 # Compile C++ files
 %.o: %.cpp

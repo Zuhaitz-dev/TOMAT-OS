@@ -33,6 +33,8 @@ The project is organized into several key files and directories:
  */
  ```
 
+[I will add the rest later ;p]
+
 ### `kernel.cpp`
 
  ```c

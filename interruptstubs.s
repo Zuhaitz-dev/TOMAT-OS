@@ -50,6 +50,8 @@ _ZN16InterruptManager26HandleInterruptRequest\num\()Ev:
 // Define handlers for specific interrupts
 HandleInterruptRequest 0x00  #< Handler for IRQ 0x00 (e.g., timer interrupt).
 HandleInterruptRequest 0x01  #< Handler for IRQ 0x01 (e.g., keyboard interrupt).
+HandleInterruptRequest 0x0C  #< Handler for IRQ 0x0C (e.g., mouse interrupt).
+
 
 /**
  * @brief Common interrupt handling code.
