@@ -26,9 +26,38 @@ Do not expect greatness. I am learning, and that is amazing. I am using [this gr
 
 ---
 
-## Installation & Usage
+## Installation
 
-TOMAT-OS requires a GCC cross-compiler, GRUB for booting, and QEMU for testing (VirtualBox available too *now*).  
+TOMAT-OS requires GCC for cross-compilation, Binutils for assembling, libc6-dev-i386 for 32-bit development, GRUB for booting, and xorriso for ISO creation. QEMU is recommended for testing, but VirtualBox is also supported.
+
+### Debian/Ubuntu
+```bash
+sudo apt update
+sudo apt install -y g++ binutils libc6-dev-i386 grub-pc xorriso
+```
+
+### Fedora
+```bash
+sudo dnf install -y gcc-c++ binutils glibc-devel.i686 grub2 xorriso
+```
+
+### Arch Linux
+```bash
+sudo pacman -Sy --needed gcc binutils lib32-glibc grub xorriso
+```
+
+### Windows (MSYS2)
+```bash
+pacman -Sy --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-binutils
+```
+*(GRUB and xorriso are not natively available on Windows—consider using WSL or a Linux VM.)*
+
+To download QEMU, [click here](https://www.qemu.org/download/). To download VirtualBox, [click here](https://www.virtualbox.org/wiki/Downloads).
+
+---
+
+## Usage
+
 Clone the repository, compile the kernel, and run it in an emulator to see it in action. 
 
 ```bash
