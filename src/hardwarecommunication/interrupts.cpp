@@ -1,13 +1,17 @@
-
 #include <hardwarecommunication/interrupts.h>
-using namespace myos::common;
-using namespace myos::hardwarecommunication;
+
+using namespace TomatOS::common;
+using namespace TomatOS::hardwarecommunication;
 
 
-void printf(char* str);
-void printfHex(uint8_t);
+
+void
+printf(char* str);
 
 
+
+void
+printfHex(uint8_t);
 
 
 
@@ -18,34 +22,36 @@ InterruptHandler::InterruptHandler(InterruptManager* interruptManager, uint8_t I
     interruptManager->handlers[InterruptNumber] = this;
 }
 
+
+
 InterruptHandler::~InterruptHandler()
 {
     if(interruptManager->handlers[InterruptNumber] == this)
         interruptManager->handlers[InterruptNumber] = 0;
 }
 
-uint32_t InterruptHandler::HandleInterrupt(uint32_t esp)
+
+
+uint32_t
+InterruptHandler::HandleInterrupt(uint32_t esp)
 {
     return esp;
 }
 
 
 
-
-
-
-
-
-
-
 InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
+
 InterruptManager* InterruptManager::ActiveInterruptManager = 0;
 
 
 
-
-void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
-    uint16_t CodeSegment, void (*handler)(), uint8_t DescriptorPrivilegeLevel, uint8_t DescriptorType)
+void
+InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
+    uint16_t CodeSegment,
+    void (*handler)(),
+    uint8_t DescriptorPrivilegeLevel,
+    uint8_t DescriptorType)
 {
     // address of pointer to code segment (relative to global descriptor table)
     // and address of the handler (relative to segment)
@@ -57,6 +63,7 @@ void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
     interruptDescriptorTable[interrupt].access = IDT_DESC_PRESENT | ((DescriptorPrivilegeLevel & 3) << 5) | DescriptorType;
     interruptDescriptorTable[interrupt].reserved = 0;
 }
+
 
 
 InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable)
@@ -137,17 +144,25 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescr
     asm volatile("lidt %0" : : "m" (idt_pointer));
 }
 
+
+
 InterruptManager::~InterruptManager()
 {
     Deactivate();
 }
 
-uint16_t InterruptManager::HardwareInterruptOffset()
+
+
+uint16_t
+InterruptManager::HardwareInterruptOffset()
 {
     return hardwareInterruptOffset;
 }
 
-void InterruptManager::Activate()
+
+
+void
+InterruptManager::Activate()
 {
     if(ActiveInterruptManager != 0)
         ActiveInterruptManager->Deactivate();
@@ -156,7 +171,10 @@ void InterruptManager::Activate()
     asm("sti");
 }
 
-void InterruptManager::Deactivate()
+
+
+void
+InterruptManager::Deactivate()
 {
     if(ActiveInterruptManager == this)
     {
@@ -165,7 +183,10 @@ void InterruptManager::Deactivate()
     }
 }
 
-uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
+
+
+uint32_t
+InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
 {
     if(ActiveInterruptManager != 0)
         return ActiveInterruptManager->DoHandleInterrupt(interrupt, esp);
@@ -173,7 +194,9 @@ uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp)
 }
 
 
-uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
+
+uint32_t
+InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
 {
     if(handlers[interrupt] != 0)
     {
@@ -195,17 +218,3 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp)
 
     return esp;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
