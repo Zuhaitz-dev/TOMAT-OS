@@ -1,12 +1,13 @@
-#ifndef __TOMATOS__DRIVERS__KEYBOARD_H
-#define __TOMATOS__DRIVERS__KEYBOARD_H
+
+#ifndef __MYOS__DRIVERS__KEYBOARD_H
+#define __MYOS__DRIVERS__KEYBOARD_H
 
 #include <common/types.h>
 #include <hardwarecommunication/interrupts.h>
 #include <drivers/driver.h>
 #include <hardwarecommunication/port.h>
 
-namespace TomatOS
+namespace myos
 {
     namespace drivers
     {
@@ -20,16 +21,16 @@ namespace TomatOS
             virtual void OnKeyUp(char);
         };
         
-        class KeyboardDriver : public TomatOS::hardwarecommunication::InterruptHandler, public Driver
+        class KeyboardDriver : public myos::hardwarecommunication::InterruptHandler, public Driver
         {
-            TomatOS::hardwarecommunication::Port8Bit dataport;
-            TomatOS::hardwarecommunication::Port8Bit commandport;
+            myos::hardwarecommunication::Port8Bit dataport;
+            myos::hardwarecommunication::Port8Bit commandport;
             
             KeyboardEventHandler* handler;
         public:
-            KeyboardDriver(TomatOS::hardwarecommunication::InterruptManager* manager, KeyboardEventHandler *handler);
+            KeyboardDriver(myos::hardwarecommunication::InterruptManager* manager, KeyboardEventHandler *handler);
             ~KeyboardDriver();
-            virtual TomatOS::common::uint32_t HandleInterrupt(TomatOS::common::uint32_t esp);
+            virtual myos::common::uint32_t HandleInterrupt(myos::common::uint32_t esp);
             virtual void Activate();
         };
 

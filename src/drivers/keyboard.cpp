@@ -1,14 +1,12 @@
 #include <drivers/keyboard.h>
 
-using namespace TomatOS::common;
-using namespace TomatOS::drivers;
-using namespace TomatOS::hardwarecommunication;
-
+using namespace myos::common;
+using namespace myos::drivers;
+using namespace myos::hardwarecommunication;
 
 
 void
 printf(char*);
-
 
 
 KeyboardEventHandler::KeyboardEventHandler()

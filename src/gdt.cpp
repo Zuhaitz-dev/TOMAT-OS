@@ -1,7 +1,7 @@
 
 #include <gdt.h>
-using namespace TomatOS;
-using namespace TomatOS::common;
+using namespace myos;
+using namespace myos::common;
 
 
 GlobalDescriptorTable::GlobalDescriptorTable()

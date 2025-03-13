@@ -1,7 +1,7 @@
 
 #include <hardwarecommunication/port.h>
-using namespace TomatOS::common;
-using namespace TomatOS::hardwarecommunication;
+using namespace myos::common;
+using namespace myos::hardwarecommunication;
 
 
 Port::Port(uint16_t portnumber)

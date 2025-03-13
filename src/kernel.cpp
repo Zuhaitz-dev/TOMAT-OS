@@ -5,10 +5,10 @@
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
 
-using namespace TomatOS;
-using namespace TomatOS::common;
-using namespace TomatOS::drivers;
-using namespace TomatOS::hardwarecommunication;
+using namespace myos;
+using namespace myos::common;
+using namespace myos::drivers;
+using namespace myos::hardwarecommunication;
 
 
 

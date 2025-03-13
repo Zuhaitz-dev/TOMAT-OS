@@ -1,9 +1,9 @@
-#ifndef __TOMATOS__GDT_H
-#define __TOMATOS__GDT_H
+#ifndef __MYOS__GDT_H
+#define __MYOS__GDT_H
 
 #include <common/types.h>
 
-namespace TomatOS
+namespace myos
 {
     
     class GlobalDescriptorTable
@@ -13,17 +13,17 @@ namespace TomatOS
             class SegmentDescriptor
             {
                 private:
-                    TomatOS::common::uint16_t limit_lo;
-                    TomatOS::common::uint16_t base_lo;
-                    TomatOS::common::uint8_t base_hi;
-                    TomatOS::common::uint8_t type;
-                    TomatOS::common::uint8_t limit_hi;
-                    TomatOS::common::uint8_t base_vhi;
+                    myos::common::uint16_t limit_lo;
+                    myos::common::uint16_t base_lo;
+                    myos::common::uint8_t base_hi;
+                    myos::common::uint8_t type;
+                    myos::common::uint8_t limit_hi;
+                    myos::common::uint8_t base_vhi;
 
                 public:
-                    SegmentDescriptor(TomatOS::common::uint32_t base, TomatOS::common::uint32_t limit, TomatOS::common::uint8_t type);
-                    TomatOS::common::uint32_t Base();
-                    TomatOS::common::uint32_t Limit();
+                    SegmentDescriptor(myos::common::uint32_t base, myos::common::uint32_t limit, myos::common::uint8_t type);
+                    myos::common::uint32_t Base();
+                    myos::common::uint32_t Limit();
             } __attribute__((packed));
 
         private:
@@ -37,8 +37,8 @@ namespace TomatOS
             GlobalDescriptorTable();
             ~GlobalDescriptorTable();
 
-            TomatOS::common::uint16_t CodeSegmentSelector();
-            TomatOS::common::uint16_t DataSegmentSelector();
+            myos::common::uint16_t CodeSegmentSelector();
+            myos::common::uint16_t DataSegmentSelector();
     };
 
 }

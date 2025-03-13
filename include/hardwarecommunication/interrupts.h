@@ -1,12 +1,13 @@
-#ifndef __TOMATOS__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
-#define __TOMATOS__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
+
+#ifndef __MYOS__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
+#define __MYOS__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
 
 #include <gdt.h>
 #include <common/types.h>
 #include <hardwarecommunication/port.h>
 
 
-namespace TomatOS
+namespace myos
 {
     namespace hardwarecommunication
     {
@@ -16,12 +17,12 @@ namespace TomatOS
         class InterruptHandler
         {
         protected:
-            TomatOS::common::uint8_t InterruptNumber;
+            myos::common::uint8_t InterruptNumber;
             InterruptManager* interruptManager;
-            InterruptHandler(InterruptManager* interruptManager, TomatOS::common::uint8_t InterruptNumber);
+            InterruptHandler(InterruptManager* interruptManager, myos::common::uint8_t InterruptNumber);
             ~InterruptHandler();
         public:
-            virtual TomatOS::common::uint32_t HandleInterrupt(TomatOS::common::uint32_t esp);
+            virtual myos::common::uint32_t HandleInterrupt(myos::common::uint32_t esp);
         };
 
 
@@ -35,25 +36,25 @@ namespace TomatOS
 
                 struct GateDescriptor
                 {
-                    TomatOS::common::uint16_t handlerAddressLowBits;
-                    TomatOS::common::uint16_t gdt_codeSegmentSelector;
-                    TomatOS::common::uint8_t reserved;
-                    TomatOS::common::uint8_t access;
-                    TomatOS::common::uint16_t handlerAddressHighBits;
+                    myos::common::uint16_t handlerAddressLowBits;
+                    myos::common::uint16_t gdt_codeSegmentSelector;
+                    myos::common::uint8_t reserved;
+                    myos::common::uint8_t access;
+                    myos::common::uint16_t handlerAddressHighBits;
                 } __attribute__((packed));
 
                 static GateDescriptor interruptDescriptorTable[256];
 
                 struct InterruptDescriptorTablePointer
                 {
-                    TomatOS::common::uint16_t size;
-                    TomatOS::common::uint32_t base;
+                    myos::common::uint16_t size;
+                    myos::common::uint32_t base;
                 } __attribute__((packed));
 
-                TomatOS::common::uint16_t hardwareInterruptOffset;
-                static void SetInterruptDescriptorTableEntry(TomatOS::common::uint8_t interrupt,
-                    TomatOS::common::uint16_t codeSegmentSelectorOffset, void (*handler)(),
-                    TomatOS::common::uint8_t DescriptorPrivilegeLevel, TomatOS::common::uint8_t DescriptorType);
+                myos::common::uint16_t hardwareInterruptOffset;
+                static void SetInterruptDescriptorTableEntry(myos::common::uint8_t interrupt,
+                    myos::common::uint16_t codeSegmentSelectorOffset, void (*handler)(),
+                    myos::common::uint8_t DescriptorPrivilegeLevel, myos::common::uint8_t DescriptorType);
 
 
                 static void InterruptIgnore();
@@ -97,8 +98,8 @@ namespace TomatOS
                 static void HandleException0x12();
                 static void HandleException0x13();
 
-                static TomatOS::common::uint32_t HandleInterrupt(TomatOS::common::uint8_t interrupt, TomatOS::common::uint32_t esp);
-                TomatOS::common::uint32_t DoHandleInterrupt(TomatOS::common::uint8_t interrupt, TomatOS::common::uint32_t esp);
+                static myos::common::uint32_t HandleInterrupt(myos::common::uint8_t interrupt, myos::common::uint32_t esp);
+                myos::common::uint32_t DoHandleInterrupt(myos::common::uint8_t interrupt, myos::common::uint32_t esp);
 
                 Port8BitSlow programmableInterruptControllerMasterCommandPort;
                 Port8BitSlow programmableInterruptControllerMasterDataPort;
@@ -106,9 +107,9 @@ namespace TomatOS
                 Port8BitSlow programmableInterruptControllerSlaveDataPort;
 
             public:
-                InterruptManager(TomatOS::common::uint16_t hardwareInterruptOffset, TomatOS::GlobalDescriptorTable* globalDescriptorTable);
+                InterruptManager(myos::common::uint16_t hardwareInterruptOffset, myos::GlobalDescriptorTable* globalDescriptorTable);
                 ~InterruptManager();
-                TomatOS::common::uint16_t HardwareInterruptOffset();
+                myos::common::uint16_t HardwareInterruptOffset();
                 void Activate();
                 void Deactivate();
         };

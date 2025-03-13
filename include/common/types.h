@@ -1,7 +1,7 @@
-#ifndef __TOMATOS__COMMON__TYPES_H
-#define __TOMATOS__COMMON__TYPES_H
+#ifndef __MYOS__COMMON__TYPES_H
+#define __MYOS__COMMON__TYPES_H
 
-namespace TomatOS
+namespace myos
 {
     namespace common
     {

@@ -1,7 +1,8 @@
- #ifndef __TOMATOS__DRIVERS__DRIVER_H
-#define __TOMATOS__DRIVERS__DRIVER_H
+ 
+#ifndef __MYOS__DRIVERS__DRIVER_H
+#define __MYOS__DRIVERS__DRIVER_H
 
-namespace TomatOS
+namespace myos
 {
     namespace drivers
     {
