@@ -93,6 +93,31 @@ make clean
 
 ---
 
+## Useful Commands
+
+### Debian/Ubuntu
+
+- *lspci* -> displays info about system PCI devices.
+```bash
+lspci
+
+# Show numeric ID's
+lspci -n
+
+# Show hex-dump of the standard part of the config space
+lspci -x
+```
+
+- *nm* -> lists network connections on the system.
+```bash
+
+# This was needed to make the interruptstubs.s
+nm obj/hardwarecommunication/interrupts.o
+```
+
+
+---
+
 ## Contributing
 
 Got ideas? Want to make TOMAT-OS even more tomato-ish? Feel free to contribute!  
