@@ -2,7 +2,6 @@
 GPPARAMS = -m32 -Iinclude -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings -fno-stack-protector -Wno-multichar
 ASPARAMS = --32
 LDPARAMS = -melf_i386
-QEMU = qemu-system-i386
 
 # Object files
 objects = 	obj/loader.o \
@@ -14,6 +13,7 @@ objects = 	obj/loader.o \
 		obj/hardwarecommunication/pci.o \
 		obj/drivers/keyboard.o \
 		obj/drivers/mouse.o \
+		obj/drivers/vga.o \
 		obj/kernel.o 
 
 # Compile C++ files
@@ -47,16 +47,8 @@ mykernel.iso: mykernel.bin
 install: mykernel.bin
 	sudo cp $< /boot/mykernel.bin
 
-# Run in QEMU
-run: mykernel.bin
-	$(QEMU) -kernel $<
-
-# Run the ISO image in QEMU
-run-iso: mykernel.iso
-	$(QEMU) -cdrom $<
-
 # Run the ISO image in VirtualBox
-run-iso-vbox: mykernel.iso
+run: mykernel.iso
 	(killall VirtualBox && sleep 1) || true
 	VirtualBox --startvm "TOMAT-OS" &
 
@@ -66,4 +58,3 @@ clean:
 
 # Phony targets
 .PHONY: clean install run
-
