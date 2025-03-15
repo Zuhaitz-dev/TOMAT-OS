@@ -28,17 +28,15 @@ Do not expect greatness. I am learning, and that is amazing. I am using [this gr
 ## How It Works
 
 - The kernel is compiled using a cross-compiler targeting i686-elf.  
-- It runs on ~~QEMU~~ and VirtualBox for easy testing without rebooting your actual system.  
-- GRUB is used as the bootloader to load the kernel.  
+- It runs on VirtualBox for easy testing without rebooting your actual system.  
+- GRUB is used as the bootloader to load the kernel.
 - The goal is to expand and experiment, adding new features along the way.  
-
-(**IN PROCESS:** It is true it runs on QEMU, but for now the keyboard driver does not work there)
 
 ---
 
 ## Installation
 
-TOMAT-OS requires GCC for cross-compilation, Binutils for assembling, libc6-dev-i386 for 32-bit development, GRUB for booting, and xorriso for ISO creation. ~~QEMU is recommended for testing~~. VirtualBox is also supported.
+TOMAT-OS requires GCC for cross-compilation, Binutils for assembling, libc6-dev-i386 for 32-bit development, GRUB for booting, and xorriso for ISO creation. VirtualBox is recommended for testing.
 
 ### Debian/Ubuntu
 ```bash
@@ -78,14 +76,8 @@ cd TOMAT-OS
 # Compile the kernel
 make
 
-# Run in QEMU
-make run
-
-# Run ISO image in QEMU
-make run-iso
-
 # Run ISO image in VirtualBox
-make run-iso-vbox
+make run
 
 # Clean build files
 make clean
