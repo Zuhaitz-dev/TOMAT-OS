@@ -12,6 +12,9 @@ using namespace myos::drivers;
 using namespace myos::hardwarecommunication;
 
 
+// Interesting wiki: https://www.lowlevel.eu/wiki/Hauptseite
+// If you don't speak German, this one is great too: https://wiki.osdev.org/Expanded_Main_Page
+
 
 // Helper function to scroll the screen up by one line.
 static void
@@ -134,7 +137,7 @@ public:
 
 //----------Class----------//
 
-
+// TOCHECK: When booting, mouse is working mostly well, but it still acts like it's also in the center position.
 
 class MouseToConsole : public MouseEventHandler
 {
@@ -209,13 +212,9 @@ kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
         KeyboardDriver keyboard(&interrupts, &kbhandler);
         drvManager.AddDriver(&keyboard);
 
-        MouseToConsole mousehandler;
-        MouseDriver mouse(&interrupts, &mousehandler);
-        drvManager.AddDriver(&mouse);
-      
         PeripheralComponentInterconnectController PCIController;
-        PCIController.SelectDrivers(&drvManager);
-
+        PCIController.SelectDrivers(&drvManager, &interrupts);
+      
     printf("\nInitializing Hardware, Stage 2...\n");
         drvManager.ActivateAll();
          
