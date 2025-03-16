@@ -28,7 +28,7 @@ Do not expect greatness. I am learning, and that is amazing. I am using [this gr
 ## How It Works
 
 - The kernel is compiled using a cross-compiler targeting i686-elf.  
-- It runs on VirtualBox for easy testing without rebooting your actual system.  
+- It runs on QEMU and VirtualBox for easy testing without rebooting your actual system.  
 - GRUB is used as the bootloader to load the kernel.
 - The goal is to expand and experiment, adding new features along the way.  
 
@@ -36,7 +36,7 @@ Do not expect greatness. I am learning, and that is amazing. I am using [this gr
 
 ## Installation
 
-TOMAT-OS requires GCC for cross-compilation, Binutils for assembling, libc6-dev-i386 for 32-bit development, GRUB for booting, and xorriso for ISO creation. VirtualBox is recommended for testing.
+TOMAT-OS requires GCC for cross-compilation, Binutils for assembling, libc6-dev-i386 for 32-bit development, GRUB for booting, and xorriso for ISO creation. QEMU and VirtualBox are recommended for testing.
 
 ### Debian/Ubuntu
 ```bash
@@ -76,11 +76,31 @@ cd TOMAT-OS
 # Compile the kernel
 make
 
+# Run ISO image in QEMU
+make run-qemu
+
 # Run ISO image in VirtualBox
-make run
+make run-vbox
 
 # Clean build files
 make clean
+```
+
+---
+# FAQ
+
+> **Q:** Can I update the repository without cloning it again?
+
+> **A:** Of course! To do that, follow these commands
+```bash
+# If you are not in the folder, get in there
+cd /path/to/TOMAT-OS
+
+# For now there's only a main, but if there were other branches, change it to the name of that branch
+git checkout main
+
+# Download the last changes
+git pull origin main 
 ```
 
 ---
