@@ -4,7 +4,7 @@ ASPARAMS = --32
 LDPARAMS = -melf_i386
 
 # Object files
-objects = obj/loader.o \
+objects = 	obj/loader.o \
         obj/gdt.o \
         obj/drivers/driver.o \
         obj/hardwarecommunication/port.o \
@@ -14,6 +14,10 @@ objects = obj/loader.o \
         obj/drivers/keyboard.o \
         obj/drivers/mouse.o \
         obj/drivers/vga.o \
+		obj/gui/widget.o \
+		obj/gui/window.o \
+		obj/gui/desktop.o \
+		obj/gui/render.o \
         obj/kernel.o 
 
 # Compile C++ files
@@ -68,5 +72,3 @@ clean:
 # Phony targets
 .PHONY: clean install run
 
-# Phony targets
-.PHONY: clean install run
