@@ -58,6 +58,7 @@ sudo pacman -Sy --needed gcc binutils lib32-glibc grub xorriso
 ```bash
 pacman -Sy --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-binutils
 ```
+
 *(GRUB and xorriso are not natively available on Windows—consider using WSL or a Linux VM.)*
 
 To download QEMU, [click here](https://www.qemu.org/download/). To download VirtualBox, [click here](https://www.virtualbox.org/wiki/Downloads).
@@ -87,11 +88,13 @@ make clean
 ```
 
 ---
-# FAQ
+
+## FAQ
 
 > **Q:** Can I update the repository without cloning it again?
 
 > **A:** Of course! To do that, follow these commands
+
 ```bash
 # If you are not in the folder, get in there
 cd /path/to/TOMAT-OS
