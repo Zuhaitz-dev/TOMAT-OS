@@ -191,6 +191,7 @@ VideoGraphicsArray::GetColorIndex(uint8_t r, uint8_t g, uint8_t b)
     if (r == 0x00 && g == 0x00 && b == 0xA8) return 0x01;   // blue
     if (r == 0x00 && g == 0xA8 && b == 0x00) return 0x02;   // green 
     if (r == 0xA8 && g == 0x00 && b == 0x00) return 0x04;   // red
+    if (r == 0x80 && g == 0x80 && b == 0x80) return 0x1F;   // gray
     if (r == 0xFF && g == 0xFF && b == 0xFF) return 0x03F;  // white
     return 0x00;
 }

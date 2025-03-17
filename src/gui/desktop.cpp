@@ -10,7 +10,8 @@ Desktop::Desktop(
     uint8_t g,
     uint8_t b)
 : CompositeWidget(0, 0, 0, w, h, r, g, b),
-MouseEventHandler()
+MouseEventHandler(),
+frameCounter(0)
 {
     MouseX = w / 2;
     MouseY = h / 2;
@@ -29,17 +30,24 @@ Desktop::Draw(myos::common::GraphicsContext* gc)
 {
     CompositeWidget::Draw(gc);
 
+    // The conditional is to make sure we have no overflow
+    frameCounter++;
+    if(frameCounter > 10000)
+        frameCounter = 0;
 
-    // Simple arrow cursor (cross)
+    // Toggle the cursor color every 2 frames (choose whatever you want tbh)
+    // The cursor alternates between white (0xFF) and gray (0x80)
+    bool blinkOn = ((frameCounter / 2) % 2 == 0);
+    uint8_t cursorColor = blinkOn ? 0xFF : 0x80;
+
     for (int i = 0; i < 4; i++)
     {
-        gc -> PutPixel(MouseX - i, MouseY, 0xFF, 0xFF, 0xFF);
-        gc -> PutPixel(MouseX + i, MouseY, 0xFF, 0xFF, 0xFF);
-        gc -> PutPixel(MouseX, MouseY - i, 0xFF, 0xFF, 0xFF);
-        gc -> PutPixel(MouseX, MouseY + i, 0xFF, 0xFF, 0xFF);
+        gc->PutPixel(MouseX - i, MouseY, cursorColor, cursorColor, cursorColor);
+        gc->PutPixel(MouseX + i, MouseY, cursorColor, cursorColor, cursorColor);
+        gc->PutPixel(MouseX, MouseY - i, cursorColor, cursorColor, cursorColor);
+        gc->PutPixel(MouseX, MouseY + i, cursorColor, cursorColor, cursorColor);
     }
 }
-
 
 
 void

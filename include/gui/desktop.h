@@ -16,6 +16,7 @@ namespace myos
          protected:
             myos::common::uint32_t MouseX;
             myos::common::uint32_t MouseY;
+            myos::common::uint8_t frameCounter;
         
          public:
             Desktop(
