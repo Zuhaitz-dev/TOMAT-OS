@@ -74,18 +74,26 @@ Clone the repository, compile the kernel, and run it in an emulator to see it in
 git clone https://github.com/Zuhaitz-dev/TOMAT-OS.git
 cd TOMAT-OS
 
-# Compile the kernel
+# Compile the kernel (.bin)
 make
 
-# Run ISO image in QEMU
-make run-qemu
+# Run ISO image in VirtualBox (TextMode)
+make run-text
 
-# Run ISO image in VirtualBox
-make run-vbox
+# Run ISO image in VirtualBox (GraphicsMode)
+make run-gfx
+
+# Run ISO image in QEMU (TextMode)
+make run-qemu-text
+
+# Run ISO image in QEMU (GraphicsMode)
+make run-qemu-gfx
 
 # Clean build files
 make clean
 ```
+
+> **NOTE:** text mode in QEMU presents some bugs, related to the keyboard drivers. For now it is recommended to work with *VirtualBox* mainly.
 
 ---
 

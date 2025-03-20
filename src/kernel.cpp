@@ -10,6 +10,7 @@
 #include <gui/window.h>
 #include <gui/render.h>     // Thank you, sloganking
 
+// #define GRAPHICSMODE    // Comment or define this flag as needed
 
 using namespace myos;
 using namespace myos::common;
@@ -51,7 +52,7 @@ ScrollUp()
 void
 printf(char* str)
 {
-    // Each character is represented by two bytes in video memory:
+// Each character is represented by two bytes in video memory:
     // 
     //          0               1               2
     //  |       |       |       |       |
@@ -65,9 +66,8 @@ printf(char* str)
     static uint8_t x = 0, y = 0;
     const int width = 80;
     const int height = 25;
-    // Choose a color attribute: foreground white (0x0F) on black background.
+// Choose a color attribute: foreground white (0x0F) on black background.
     uint8_t color = 0x0F;
-
     for (int i = 0; str[i] != '\0'; i++)
     {
         char c = str[i];
@@ -78,7 +78,7 @@ printf(char* str)
         }
         else if (c == '\b')
         {
-            // Handle backspace: move back one column, clear the character.
+// Handle backspace: move back one column, clear the character.
             if (x > 0)
                 x--;
             else if (y > 0)
@@ -131,11 +131,10 @@ printfHex(uint8_t key)
 
 class PrintfKeyboardEventHandler : public KeyboardEventHandler
 {
-public:
+ public:
     void OnKeyDown(char c)
     {
-        char* foo = " ";
-        foo[0] = c;
+        char foo[2] = {c, '\0'};
         printf(foo);
     }
 };
@@ -149,45 +148,39 @@ public:
 class MouseToConsole : public MouseEventHandler
 {
     int8_t x, y;
-public:
-    
+ public:
     MouseToConsole()
     {
         uint16_t* VideoMemory = (uint16_t*)0xb8000;
         x = 40;
         y = 12;
-        VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4
-                            | (VideoMemory[80*y+x] & 0xF000) >> 4
-                            | (VideoMemory[80*y+x] & 0x00FF);        
+        VideoMemory[80 * y + x] = (VideoMemory[80 * y + x] & 0x0F00) << 4
+                                | (VideoMemory[80 * y + x] & 0xF000) >> 4
+                                | (VideoMemory[80 * y + x] & 0x00FF);
     }
     
+
     
-    
-    virtual void
-    OnMouseMove(int xoffset, int yoffset)
+virtual void
+OnMouseMove(int xoffset, int yoffset)
     {
         static uint16_t* VideoMemory = (uint16_t*)0xb8000;
-        VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4
-                            | (VideoMemory[80*y+x] & 0xF000) >> 4
-                            | (VideoMemory[80*y+x] & 0x00FF);
-
+        // Erase previous cursor
+        VideoMemory[80 * y + x] = (VideoMemory[80 * y + x] & 0x0F00) << 4
+                                | (VideoMemory[80 * y + x] & 0xF000) >> 4
+                                | (VideoMemory[80 * y + x] & 0x00FF);
         x += xoffset;
         if(x >= 80) x = 79;
         if(x < 0) x = 0;
         y += yoffset;
         if(y >= 25) y = 24;
         if(y < 0) y = 0;
-
-        VideoMemory[80*y+x] = (VideoMemory[80*y+x] & 0x0F00) << 4
-                            | (VideoMemory[80*y+x] & 0xF000) >> 4
-                            | (VideoMemory[80*y+x] & 0x00FF);
+        // Draw new cursor
+        VideoMemory[80 * y + x] = (VideoMemory[80 * y + x] & 0x0F00) << 4
+                                | (VideoMemory[80 * y + x] & 0xF000) >> 4
+                                | (VideoMemory[80 * y + x] & 0x00FF);
     }
-    
 };
-
-
-
-
 
 typedef void (*constructor)();
 extern "C" constructor start_ctors;
@@ -204,61 +197,63 @@ callConstructors()
 extern "C" void
 kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 {
-    printf("Hello World! --- https://github.com/Zuhaitz-dev\n");    // Will not work without the printf function we made. 
-                                                                    // Libraries won't work, for now, so we have to make everything.
-                                                                    
+    printf("Hello World! --- https://github.com/Zuhaitz-dev\n");
     GlobalDescriptorTable gdt;
-    // InterruptManager interrupts(&gdt);
     InterruptManager interrupts(0x20, &gdt);
-
     printf("\nInitializing Hardware, Stage 1...\n");
-
-    Desktop desktop(320, 200, 0x00, 0x00, 0xA8);
-
+    
     DriverManager drvManager;
     
-        // PrintfKeyboardEventHandler kbhandler;
-        // KeyboardDriver keyboard(&interrupts, &kbhandler);
-        KeyboardDriver keyboard(&interrupts, &desktop);
-        drvManager.AddDriver(&keyboard);
+#if defined(GRAPHICSMODE)
+    // Initialize graphics mode objects.
+    Desktop desktop(320, 200, 0x00, 0x00, 0xA8);
+    KeyboardDriver keyboard(&interrupts, &desktop);
+    drvManager.AddDriver(&keyboard);
+    MouseDriver mouse(&interrupts, &desktop);
+    drvManager.AddDriver(&mouse);
+#else
+    // Use basic console input handlers.
+    PrintfKeyboardEventHandler kbhandler;
+    KeyboardDriver keyboard(&interrupts, &kbhandler);
+    drvManager.AddDriver(&keyboard);
+    MouseToConsole mousehandler;
+    MouseDriver mouse(&interrupts, &mousehandler);
+    drvManager.AddDriver(&mouse);
+#endif
 
-        // Just noticed that out of nowhere I stopped having the mouse driver...
-        // Of COURSE THE MOUSE DID NOT WORK HAHAHA
+    PeripheralComponentInterconnectController PCIController;
+    PCIController.SelectDrivers(&drvManager, &interrupts);
 
-        //MouseToConsole mousehandler;
-        //MouseDriver mouse(&interrupts, &mousehandler);
-        MouseDriver mouse(&interrupts, &desktop);
-        drvManager.AddDriver(&mouse);
+#if defined(GRAPHICSMODE)
+    VideoGraphicsArray vga;
+    Render rend(320, 200); // Hardcoded for now
+#endif
 
-        PeripheralComponentInterconnectController PCIController;
-        PCIController.SelectDrivers(&drvManager, &interrupts);
-
-        VideoGraphicsArray vga;
-        
-        Render rend(320, 200); // Hardcoded for now, might change in the future
-      
     printf("\nInitializing Hardware, Stage 2...\n");
-        drvManager.ActivateAll();
-         
+    drvManager.ActivateAll();
     printf("\nInitializing Hardware, Stage 3...\n");
 
-    vga.SetMode(320, 200, 8);
-
+#if defined(GRAPHICSMODE)
+    vga.SetMode(320,200,8);
     Window win1(&desktop, 10, 10, 20, 20, 0xA8, 0x00, 0x00);
     desktop.AddChild(&win1);
     Window win2(&desktop, 40, 15, 30, 30, 0x00, 0xA8, 0x00);
     desktop.AddChild(&win2);
+#endif
 
     interrupts.Activate();
 
-// This is not a good idea, with multitasking we will solve this tho
-
+#if defined(GRAPHICSMODE)
     while (1)
     {
-        // Render new frame
+        // Render graphics mode.
         desktop.Draw(&rend);
-
-        // Display rendered frame
         rend.display(&vga);
     }
+#else
+    while (1)
+    {
+        // In text mode, we could halt or add other non-graphical tasks.
+    }
+#endif
 }

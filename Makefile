@@ -3,8 +3,11 @@ GPPARAMS = -m32 -Iinclude -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -
 ASPARAMS = --32
 LDPARAMS = -melf_i386
 
+# GRAPHICSFLAG is empty by default (non-graphics build).
+GRAPHICSFLAG = 
+
 # Object files
-objects = 	obj/loader.o \
+objects =     obj/loader.o \
         obj/gdt.o \
         obj/drivers/driver.o \
         obj/hardwarecommunication/port.o \
@@ -20,10 +23,10 @@ objects = 	obj/loader.o \
 		obj/gui/render.o \
         obj/kernel.o 
 
-# Compile C++ files
+# Compile C++ files with additional flags (GRAPHICSFLAG)
 obj/%.o: src/%.cpp
 	mkdir -p $(@D)
-	g++ $(GPPARAMS) -o $@ -c $<
+	g++ $(GPPARAMS) $(GRAPHICSFLAG) -o $@ -c $<
 
 # Compile Assembly files
 obj/%.o: src/%.s
@@ -51,24 +54,33 @@ mykernel.iso: mykernel.bin
 install: mykernel.bin
 	sudo cp $< /boot/mykernel.bin
 
-# Run the binary in VirtualBox
-run: mykernel.bin
+# Extra target for non-graphics mode (text mode)
+run-text: GRAPHICSFLAG =
+run-text: mykernel.iso
 	(killall VirtualBox && sleep 1) || true
 	VirtualBox --startvm "TOMAT-OS" &
 
-# Run the ISO image in VirtualBox
-run-vbox: mykernel.iso
+# Extra target for graphics mode
+run-gfx: GRAPHICSFLAG = -DGRAPHICSMODE
+run-gfx: mykernel.iso
 	(killall VirtualBox && sleep 1) || true
 	VirtualBox --startvm "TOMAT-OS" &
 
-# Run the ISO image in QEMU
-run-qemu: mykernel.iso
-	qemu-system-x86_64 -boot d -cdrom mykernel.iso -m 512 -vga std
+# TOCHECK: Keyboard drivers aren't working correctly in this mode.
+# QEMU target for non-graphics (text) mode
+run-qemu-text: GRAPHICSFLAG =
+run-qemu-text: mykernel.iso
+	qemu-system-i386 -boot d -cdrom mykernel.iso -m 512 -vga std
+
+# QEMU target for graphics mode
+run-qemu-gfx: GRAPHICSFLAG = -DGRAPHICSMODE
+run-qemu-gfx: mykernel.iso
+	qemu-system-i386 -boot d -cdrom mykernel.iso -m 512 -vga std
 
 # Clean build files and directories
 clean:
 	rm -rf obj mykernel.bin mykernel.iso
 
 # Phony targets
-.PHONY: clean install run
+.PHONY: clean install run run-text run-gfx
 

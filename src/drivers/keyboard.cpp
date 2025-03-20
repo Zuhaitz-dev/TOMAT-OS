@@ -4,9 +4,11 @@ using namespace myos::common;
 using namespace myos::drivers;
 using namespace myos::hardwarecommunication;
 
-
 void
 printf(char*);
+void
+printfHex(uint8_t);
+
 
 
 KeyboardEventHandler::KeyboardEventHandler()
@@ -36,9 +38,9 @@ KeyboardEventHandler::OnKeyUp(char)
 
 
 KeyboardDriver::KeyboardDriver(InterruptManager* manager, KeyboardEventHandler* handler)
-: InterruptHandler(manager, 0x21),
-dataport(0x60),
-commandport(0x64)
+    : InterruptHandler(manager, 0x21),
+      dataport(0x60),
+      commandport(0x64)
 {
     this->handler = handler;
 }
@@ -53,18 +55,11 @@ KeyboardDriver::~KeyboardDriver()
 
 
 void
-printf(char*);
-
-void
-printfHex(uint8_t);
-
-
-
-void
 KeyboardDriver::Activate()
 {
     while (commandport.Read() & 0x1)
         dataport.Read();
+
     commandport.Write(0xAE); // activate interrupts
     commandport.Write(0x20); // command 0x20 = read controller command byte
     uint8_t status = (dataport.Read() | 1) & ~0x10;
@@ -85,7 +80,7 @@ KeyboardDriver::HandleInterrupt(uint32_t esp)
     uint8_t key = dataport.Read();
 
     // Filter out ACK (0xFA)
-    if(key == 0xFA)
+    if (key == 0xFA)
         return esp;
         
     // Debug: print raw scan code as hex.
@@ -94,21 +89,21 @@ KeyboardDriver::HandleInterrupt(uint32_t esp)
     // printf("\n");
     
 
-    if(handler == 0)
+    if (handler == 0)
     {
         return esp;
     }
 
     // if != 0xE0 -> == 0x0E. And vice versa.
-    if(key == 0x0E)
+    if (key == 0x0E)
     {
         // Read the next byte for the extended code.
         uint8_t extended = dataport.Read();
         // Ignore extended key releases.
-        if(extended & 0x80)
+        if (extended & 0x80)
             return esp;
         // Delete key
-        if(extended == 0x0E)
+        if (extended == 0x0E)
         {
             // Simulate deletion with backspace.
             handler->OnKeyDown('\b');
@@ -118,9 +113,9 @@ KeyboardDriver::HandleInterrupt(uint32_t esp)
     }
 
     // If key is a release event (bit 7 set) and it's not a shift release, ignore it.
-    if(key & 0x80)
+    if (key & 0x80)
     {
-        if(key == 0xAA || key == 0xB6)
+        if (key == 0xAA || key == 0xB6)
         {
             shift = false;
         }
@@ -137,11 +132,6 @@ KeyboardDriver::HandleInterrupt(uint32_t esp)
 
     switch (key)
     {
-        // case 0x01:
-        //     // Kernel shutdown command.
-        //     KernelShutdown();
-        //     break;
-        
         // Shift key press/release
         case 0x2A: // Left Shift pressed
         case 0x36: // Right Shift pressed
@@ -307,11 +297,11 @@ KeyboardDriver::HandleInterrupt(uint32_t esp)
 
         default:
             // For unknown keys, print the key code.
-            printf("KEYBOARD 0x");
-            printfHex(key);
+            // printf("KEYBOARD 0x");
+            // printfHex(key);
 
-            // Let's do it like this later:
-            // handler->OnKeyDown('?');
+            // This is also availble:
+            handler->OnKeyDown('?');
             break;
     }
 
