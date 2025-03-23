@@ -11,12 +11,12 @@ namespace myos
         class Pixel
         {
          public:
-            myos::common::uint8_t r;
-            myos::common::uint8_t g;
-            myos::common::uint8_t b;
+            common::uint8_t r;
+            common::uint8_t g;
+            common::uint8_t b;
          };
  
-        class Render : public myos::drivers::VideoGraphicsArray
+        class Render : public drivers::VideoGraphicsArray
         {
          private:
             Pixel pixels[320][200];
@@ -30,7 +30,9 @@ namespace myos
  
             void display(common::GraphicsContext* gc);
  
-            void PutPixel(myos::common::int32_t x, myos::common::int32_t y, myos::common::uint8_t r, myos::common::uint8_t g, myos::common::uint8_t b);
+            void PutPixel(
+                common::int32_t x, common::int32_t y,
+                common::uint8_t r, common::uint8_t g, common::uint8_t b);
         };
     }
 }

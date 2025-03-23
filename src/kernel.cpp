@@ -9,6 +9,7 @@
 #include <gui/desktop.h>
 #include <gui/window.h>
 #include <gui/render.h>     // Thank you, sloganking
+#include <multitasking.h>
 
 // #define GRAPHICSMODE    // Comment or define this flag as needed
 
@@ -161,8 +162,8 @@ class MouseToConsole : public MouseEventHandler
     
 
     
-virtual void
-OnMouseMove(int xoffset, int yoffset)
+    virtual void
+    OnMouseMove(int xoffset, int yoffset)
     {
         static uint16_t* VideoMemory = (uint16_t*)0xb8000;
         // Erase previous cursor
@@ -182,6 +183,29 @@ OnMouseMove(int xoffset, int yoffset)
     }
 };
 
+
+
+    // For testing multitasking. 
+    // It works, but it is commented to be able to use the graphics mode
+    /*
+    void
+    TaskA()
+    {
+        while (true)
+            printf("A");
+    }
+
+
+
+    void
+    TaskB()
+    {
+        while(true)
+            printf("B");
+    }
+    */
+
+
 typedef void (*constructor)();
 extern "C" constructor start_ctors;
 extern "C" constructor end_ctors;
@@ -198,8 +222,23 @@ extern "C" void
 kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 {
     printf("Hello World! --- https://github.com/Zuhaitz-dev\n");
+
     GlobalDescriptorTable gdt;
-    InterruptManager interrupts(0x20, &gdt);
+    
+    // Uncomment to test multitasking 
+    // (in text mode, as for now TaskA and TaskB aren't... great)
+    
+    TaskManager taskManager;
+
+    /*
+    Task task1(&gdt, TaskA);
+    Task task2(&gdt, TaskB);
+    taskManager.AddTask(&task1);
+    taskManager.AddTask(&task2);
+    */
+
+    InterruptManager interrupts(0x20, &gdt, &taskManager);
+    
     printf("\nInitializing Hardware, Stage 1...\n");
     
     DriverManager drvManager;
@@ -230,7 +269,9 @@ kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 #endif
 
     printf("\nInitializing Hardware, Stage 2...\n");
+    
     drvManager.ActivateAll();
+    
     printf("\nInitializing Hardware, Stage 3...\n");
 
 #if defined(GRAPHICSMODE)

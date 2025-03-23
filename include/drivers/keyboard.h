@@ -21,16 +21,16 @@ namespace myos
             virtual void OnKeyUp(char);
         };
         
-        class KeyboardDriver : public myos::hardwarecommunication::InterruptHandler, public Driver
+        class KeyboardDriver : public hardwarecommunication::InterruptHandler, public Driver
         {
-            myos::hardwarecommunication::Port8Bit dataport;
-            myos::hardwarecommunication::Port8Bit commandport;
+            hardwarecommunication::Port8Bit dataport;
+            hardwarecommunication::Port8Bit commandport;
             
             KeyboardEventHandler* handler;
         public:
-            KeyboardDriver(myos::hardwarecommunication::InterruptManager* manager, KeyboardEventHandler *handler);
+            KeyboardDriver(hardwarecommunication::InterruptManager* manager, KeyboardEventHandler *handler);
             ~KeyboardDriver();
-            virtual myos::common::uint32_t HandleInterrupt(myos::common::uint32_t esp);
+            virtual common::uint32_t HandleInterrupt(common::uint32_t esp);
             virtual void Activate();
         };
 

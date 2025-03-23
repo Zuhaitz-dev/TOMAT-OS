@@ -14,36 +14,44 @@ namespace myos
         class VideoGraphicsArray
         {
          protected:
-            myos::hardwarecommunication::Port8Bit miscPort;
-            myos::hardwarecommunication::Port8Bit crtcIndexPort;
-            myos::hardwarecommunication::Port8Bit crtcDataPort;
-            myos::hardwarecommunication::Port8Bit sequencerIndexPort;
-            myos::hardwarecommunication::Port8Bit sequencerDataPort;
-            myos::hardwarecommunication::Port8Bit graphicsControllerIndexPort;
-            myos::hardwarecommunication::Port8Bit graphicsControllerDataPort;
-            myos::hardwarecommunication::Port8Bit attributeControllerIndexPort;
-            myos::hardwarecommunication::Port8Bit attributeControllerReadPort;
-            myos::hardwarecommunication::Port8Bit attributeControllerWritePort;
-            myos::hardwarecommunication::Port8Bit attributeControllerResetPort;
+            hardwarecommunication::Port8Bit miscPort;
+            hardwarecommunication::Port8Bit crtcIndexPort;
+            hardwarecommunication::Port8Bit crtcDataPort;
+            hardwarecommunication::Port8Bit sequencerIndexPort;
+            hardwarecommunication::Port8Bit sequencerDataPort;
+            hardwarecommunication::Port8Bit graphicsControllerIndexPort;
+            hardwarecommunication::Port8Bit graphicsControllerDataPort;
+            hardwarecommunication::Port8Bit attributeControllerIndexPort;
+            hardwarecommunication::Port8Bit attributeControllerReadPort;
+            hardwarecommunication::Port8Bit attributeControllerWritePort;
+            hardwarecommunication::Port8Bit attributeControllerResetPort;
 
-            void WriteRegisters(myos::common::uint8_t* registers);
-            myos::common::uint8_t* GetFrameBufferSegment();
+            void WriteRegisters(common::uint8_t* registers);
+            common::uint8_t* GetFrameBufferSegment();
 
-            virtual myos::common::uint8_t GetColorIndex(myos::common::uint8_t r, myos::common::uint8_t g, myos::common::uint8_t b);
+            virtual common::uint8_t GetColorIndex(common::uint8_t r, common::uint8_t g, common::uint8_t b);
 
 
          public:
             VideoGraphicsArray();
             ~VideoGraphicsArray();
 
-            virtual bool SupportsMode(myos::common::uint32_t width, myos::common::uint32_t height, myos::common::uint32_t colordepth);
-            virtual bool SetMode(myos::common::uint32_t width, myos::common::uint32_t height, myos::common::uint32_t colordepth);
+            virtual bool SupportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colordepth);
+            virtual bool SetMode(common::uint32_t width, common::uint32_t height, common::uint32_t colordepth);
 
             // Coordinates: XY; Colors: RGB.
-            virtual void PutPixel(myos::common::int32_t x, myos::common::int32_t y, myos::common::uint8_t r, myos::common::uint8_t g, myos::common::uint8_t b);
-            virtual void PutPixel(myos::common::int32_t x, myos::common::int32_t y, myos::common::uint8_t colorIndex);
+            virtual void PutPixel(
+                common::int32_t x, common::int32_t y,
+                common::uint8_t r, common::uint8_t g, common::uint8_t b);
+            
+            virtual void PutPixel(
+                common::int32_t x, common::int32_t y,
+                common::uint8_t colorIndex);
 
-            virtual void FillRectangle(myos::common::uint32_t x, myos::common::uint32_t y, myos::common::uint32_t w, myos::common::uint32_t h, myos::common::uint8_t r, myos::common::uint8_t g, myos::common::uint8_t b);
+            virtual void FillRectangle(
+                common::uint32_t x,common::uint32_t y,
+                common::uint32_t w, common::uint32_t h,
+                common::uint8_t r, common::uint8_t g, common::uint8_t b);
         };
     }
 }

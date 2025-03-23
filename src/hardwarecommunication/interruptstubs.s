@@ -10,16 +10,17 @@
 .macro HandleException num
 .global _ZN4myos21hardwarecommunication16InterruptManager19HandleException\num\()Ev
 _ZN4myos21hardwarecommunication16InterruptManager19HandleException\num\()Ev:
-    movb $\num, (interruptnumber)
-    jmp int_bottom
+    movb    $\num, (interruptnumber)
+    jmp     int_bottom
 .endm
 
 
 .macro HandleInterruptRequest num
 .global _ZN4myos21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev
 _ZN4myos21hardwarecommunication16InterruptManager26HandleInterruptRequest\num\()Ev:
-    movb $\num + IRQ_BASE, (interruptnumber)
-    jmp int_bottom
+    movb    $\num + IRQ_BASE, (interruptnumber)
+    pushl   $0
+    jmp     int_bottom
 .endm
 
 
@@ -64,32 +65,51 @@ HandleInterruptRequest 0x31
 
 int_bottom:
 
-    # register sichern
-    pusha
-    pushl %ds
-    pushl %es
-    pushl %fs
-    pushl %gs
+    # save registers
+    # pusha
+    # pushl   %ds
+    # pushl   %es
+    # pushl   %fs
+    # pushl   %gs
 
-    # ring 0 segment register laden
-    #cld
-    #mov $0x10, %eax
-    #mov %eax, %eds
-    #mov %eax, %ees
+    pushl   %ebp
+    pushl   %edi
+    pushl   %esi
 
-    # C++ Handler aufrufen
-    pushl %esp
-    push (interruptnumber)
-    call _ZN4myos21hardwarecommunication16InterruptManager15HandleInterruptEhj
-    add %esp, 6
-    mov %eax, %esp # den stack wechseln
+    pushl   %edx
+    pushl   %ecx
+    pushl   %ebx
+    pushl   %eax
 
-    # register laden
-    pop %gs
-    pop %fs
-    pop %es
-    pop %ds
-    popa
+    # Load ring 0 segment register
+    # cld
+    # mov    $0x10, %eax
+    # mov    %eax, %eds
+    # mov    %eax, %ees
+
+    # call C++ Handler
+    pushl   %esp
+    push    (interruptnumber)
+    call    _ZN4myos21hardwarecommunication16InterruptManager15HandleInterruptEhj
+    # add     %esp, 6
+    mov     %eax, %esp # switch the stack
+
+    # restore registers
+    popl    %eax
+    popl    %ebx
+    popl    %ecx
+    popl    %edx
+    
+    popl    %esi
+    popl    %edi
+    popl    %ebp
+    # pop     %gs
+    # pop     %fs
+    # pop     %es
+    # pop     %ds
+    # popa
+
+    add     $4, %esp
 
 .global _ZN4myos21hardwarecommunication16InterruptManager15InterruptIgnoreEv
 _ZN4myos21hardwarecommunication16InterruptManager15InterruptIgnoreEv:

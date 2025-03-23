@@ -7,21 +7,22 @@ LDPARAMS = -melf_i386
 GRAPHICSFLAG = 
 
 # Object files
-objects =     obj/loader.o \
-        obj/gdt.o \
-        obj/drivers/driver.o \
-        obj/hardwarecommunication/port.o \
-        obj/hardwarecommunication/interrupts.o \
-        obj/hardwarecommunication/interruptstubs.o \
-        obj/hardwarecommunication/pci.o \
-        obj/drivers/keyboard.o \
-        obj/drivers/mouse.o \
-        obj/drivers/vga.o \
-		obj/gui/widget.o \
-		obj/gui/window.o \
-		obj/gui/desktop.o \
-		obj/gui/render.o \
-        obj/kernel.o 
+objects =	obj/loader.o \
+        	obj/gdt.o \
+        	obj/drivers/driver.o \
+        	obj/hardwarecommunication/port.o \
+        	obj/hardwarecommunication/interrupts.o \
+        	obj/hardwarecommunication/interruptstubs.o \
+			obj/multitasking.o \
+        	obj/hardwarecommunication/pci.o \
+			obj/drivers/keyboard.o \
+        	obj/drivers/mouse.o \
+        	obj/drivers/vga.o \
+			obj/gui/widget.o \
+			obj/gui/window.o \
+			obj/gui/desktop.o \
+			obj/gui/render.o \
+        	obj/kernel.o 
 
 # Compile C++ files with additional flags (GRAPHICSFLAG)
 obj/%.o: src/%.cpp

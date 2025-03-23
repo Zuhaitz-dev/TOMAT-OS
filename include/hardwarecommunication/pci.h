@@ -24,8 +24,8 @@ namespace myos
          public:
             // 4th bit Mem mapping
             bool prefetchable;
-            myos::common::uint8_t* address;
-            myos::common::int32_t size;
+            common::uint8_t* address;
+            common::int32_t size;
             BaseAddressRegisterType type;
         };
 
@@ -34,21 +34,21 @@ namespace myos
         class PeripheralComponentInterconnectDeviceDescriptor
         {
          public:
-            myos::common::uint32_t portBase;
-            myos::common::uint32_t Interrupt;
+            common::uint32_t portBase;
+            common::uint32_t Interrupt;
 
-            myos::common::uint16_t bus;
-            myos::common::uint16_t device;
-            myos::common::uint16_t function;
+            common::uint16_t bus;
+            common::uint16_t device;
+            common::uint16_t function;
 
-            myos::common::uint16_t vendor_id;
-            myos::common::uint16_t device_id;
+            common::uint16_t vendor_id;
+            common::uint16_t device_id;
 
-            myos::common::uint8_t class_id;
-            myos::common::uint8_t subclass_id;
-            myos::common::uint8_t interface_id;
+            common::uint8_t class_id;
+            common::uint8_t subclass_id;
+            common::uint8_t interface_id;
 
-            myos::common::uint8_t revision;
+            common::uint8_t revision;
 
             PeripheralComponentInterconnectDeviceDescriptor();
             ~PeripheralComponentInterconnectDeviceDescriptor();
@@ -65,15 +65,15 @@ namespace myos
             PeripheralComponentInterconnectController();
             ~PeripheralComponentInterconnectController();
 
-            myos::common::uint32_t Read(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function, myos::common::uint32_t registeroffset);
-            void Write(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function, myos::common::uint32_t registeroffset, myos::common::uint32_t value);
-            bool DeviceHasFunctions(myos::common::uint16_t bus, myos::common::uint16_t device);
+            common::uint32_t Read(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint32_t registeroffset);
+            void Write(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint32_t registeroffset, common::uint32_t value);
+            bool DeviceHasFunctions(common::uint16_t bus, common::uint16_t device);
 
-            void SelectDrivers(myos::drivers::DriverManager* driverManager, myos::hardwarecommunication::InterruptManager* interrupts);
-            myos::drivers::Driver* GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, myos::hardwarecommunication::InterruptManager* interrupts);
+            void SelectDrivers(drivers::DriverManager* driverManager, hardwarecommunication::InterruptManager* interrupts);
+            drivers::Driver* GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, hardwarecommunication::InterruptManager* interrupts);
             
-            PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function);
-            BaseAddressRegister GetBaseAddressRegister(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function, myos::common::uint16_t bar);
+            PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(common::uint16_t bus, common::uint16_t device, common::uint16_t function);
+            BaseAddressRegister GetBaseAddressRegister(common::uint16_t bus, common::uint16_t device, common::uint16_t function, common::uint16_t bar);
         };
     }
 }

@@ -11,26 +11,29 @@ namespace myos
 {
     namespace gui
     {
-        class Desktop : public CompositeWidget, public myos::drivers::MouseEventHandler
+        class Desktop : public CompositeWidget, public drivers::MouseEventHandler
         {
          protected:
-            myos::common::uint32_t MouseX;
-            myos::common::uint32_t MouseY;
-            myos::common::uint8_t frameCounter;
+            common::uint32_t MouseX;
+            common::uint32_t MouseY;
+
+            // For blinking cursor
+            common::uint8_t frameCounter;
         
          public:
             Desktop(
-                myos::common::int32_t w,
-                myos::common::int32_t h,
-                myos::common::uint8_t r,
-                myos::common::uint8_t g,
-                myos::common::uint8_t b);
+                common::int32_t w,
+                common::int32_t h,
+                common::uint8_t r,
+                common::uint8_t g,
+                common::uint8_t b);
             
             ~Desktop();
 
-            void Draw(myos::common::GraphicsContext* gc);
-            void OnMouseDown(myos::common::uint8_t button);
-            void OnMouseUp(myos::common::uint8_t button);
+            void Draw(common::GraphicsContext* gc);
+            
+            void OnMouseDown(common::uint8_t button);
+            void OnMouseUp(common::uint8_t button);
             void OnMouseMove(int x, int y);
         };
     }

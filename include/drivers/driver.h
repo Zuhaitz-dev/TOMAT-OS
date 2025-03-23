@@ -9,7 +9,7 @@ namespace myos
 
         class Driver
         {
-        public:
+         public:
             Driver();
             ~Driver();
             
@@ -20,11 +20,11 @@ namespace myos
 
         class DriverManager
         {
-        private:
+         private:
             Driver* drivers[265];
             int numDrivers;
             
-        public:
+         public:
             DriverManager();
             void AddDriver(Driver*);
             
