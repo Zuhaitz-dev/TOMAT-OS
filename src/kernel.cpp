@@ -1,5 +1,6 @@
 #include <common/types.h>
 #include <gdt.h>
+#include <memorymanagement.h>
 #include <hardwarecommunication/interrupts.h>
 #include <hardwarecommunication/pci.h>
 #include <drivers/driver.h>
@@ -24,6 +25,7 @@ using namespace myos::gui;
 // Interesting wiki: https://www.lowlevel.eu/wiki/Hauptseite
 // If you don't speak German, this one is great too: https://wiki.osdev.org/Expanded_Main_Page
 
+// multiboot.h: https://www.gnu.org/software/grub/manual/multiboot/html_node/multiboot_002eh.html
 
 // Helper function to scroll the screen up by one line.
 static void
@@ -185,25 +187,25 @@ class MouseToConsole : public MouseEventHandler
 
 
 
-    // For testing multitasking. 
-    // It works, but it is commented to be able to use the graphics mode
-    /*
-    void
-    TaskA()
-    {
-        while (true)
-            printf("A");
-    }
+// For testing multitasking. 
+// It works, but it is commented to be able to use the graphics mode
+/*
+void
+TaskA()
+{
+    while (true)
+        printf("A");
+}
 
 
 
-    void
-    TaskB()
-    {
-        while(true)
-            printf("B");
-    }
-    */
+void
+TaskB()
+{
+    while(true)
+        printf("B");
+}
+*/
 
 
 typedef void (*constructor)();
@@ -225,9 +227,31 @@ kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/)
 
     GlobalDescriptorTable gdt;
     
-    // Uncomment to test multitasking 
-    // (in text mode, as for now TaskA and TaskB aren't... great)
     
+    // Hardcoded, but we will find a solution... Maybe
+    uint32_t* menupper = (uint32_t*)(((size_t)multiboot_structure) + 8);
+    size_t heap = 10 * 1024 * 1024;
+    MemoryManager MemoryManager(heap, (*menupper) * 1024 - heap - 10 * 1024);
+
+    printf("\n");
+    printf("heap: 0x");
+    printfHex((heap >> 24) & 0xFF);
+    printfHex((heap >> 16) & 0xFF);
+    printfHex((heap >>  8) & 0xFF);
+    printfHex((heap      ) & 0xFF);
+    printf("\n");
+
+    void* allocated = MemoryManager.malloc(1024);
+
+    printf("allocated: 0x");
+    printfHex(((size_t)allocated >> 24) & 0xFF);
+    printfHex(((size_t)allocated >> 16) & 0xFF);
+    printfHex(((size_t)allocated >>  8) & 0xFF);
+    printfHex(((size_t)allocated      ) & 0xFF);
+    printf("\n");
+
+    // Uncomment to test multitasking 
+    // (in text mode, as for now TaskA and TaskB aren't... great)    
     TaskManager taskManager;
 
     /*

@@ -9,6 +9,7 @@ GRAPHICSFLAG =
 # Object files
 objects =	obj/loader.o \
         	obj/gdt.o \
+			obj/memorymanagement.o \
         	obj/drivers/driver.o \
         	obj/hardwarecommunication/port.o \
         	obj/hardwarecommunication/interrupts.o \

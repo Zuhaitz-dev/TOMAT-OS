@@ -15,6 +15,7 @@ namespace myos
         typedef long long int           int64_t;
         typedef unsigned long long int uint64_t;
         typedef const char*              string;
+        typedef uint32_t                 size_t;    // 32 bit system -> Memory addresses are this size.
     
     }
 }
