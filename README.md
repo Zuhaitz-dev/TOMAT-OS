@@ -41,7 +41,7 @@ TOMAT-OS requires GCC for cross-compilation, Binutils for assembling, libc6-dev-
 ### Debian/Ubuntu
 ```bash
 sudo apt update
-sudo apt install -y g++ binutils libc6-dev-i386 grub-pc xorriso
+sudo apt install -y g++ binutils libc6-dev-i386 grub-pc xorriso mtools
 ```
 
 ### Fedora
